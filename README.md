@@ -24,7 +24,7 @@ Steps
 * Click Save
 
 ## .env file
-* Copy the .sample.env file and rename to .env.
+* Copy the .sample.env file and rename to .env  `cp .sample.env .env`
 * Add site URI, do not include https://
 * Enter user credentials including OAuth Consumer Key and Consumer Secret
 
