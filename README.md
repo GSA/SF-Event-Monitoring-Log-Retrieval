@@ -1,3 +1,17 @@
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [Salesforce Event Monitoring Log Retrieval](#salesforce-event-monitoring-log-retrieval)
+- [Setup](#setup)
+	- [Salesforce Event Monitoring](#salesforce-event-monitoring)
+	- [Salesforce Connected App](#salesforce-connected-app)
+	- [.env file](#env-file)
+- [Requirements](#requirements)
+- [Usage](#usage)
+	- [Run Locally](#run-locally)
+	- [Setup CRON Job](#setup-cron-job)
+- [FAQ and Troubleshooting](#faq-and-troubleshooting)
+
+<!-- /TOC -->
 # Salesforce Event Monitoring Log Retrieval
 A lightweight Python command line utility that fetches Salesforce Event Monitoring Log Files for the purpose of consumption by log management and monitoring software.
 
@@ -24,7 +38,7 @@ Steps
 * Click Save
 
 ## .env file
-* Copy the .sample.env file and rename to .env  `cp .sample.env .env`
+* Copy the .sample.env file and rename to .env.
 * Add site URI, do not include https://
 * Enter user credentials including OAuth Consumer Key and Consumer Secret
 
@@ -100,3 +114,7 @@ $ retrieveLogs.py {orgname} -v
 $ crontab -e
 0 1 * * * path/to/retrieveLogs.py {orgname}
 ```
+
+# FAQ and Troubleshooting
+**500 Response on sa.authenticate()**
+* When authenticating, if Salesforce responds with a `500` error but you are able to reach the site via the browser, this is likely due to an outdated OpenSSL library old version of Python. Salesforce requires TLS 1.1 or greater for secure connections. Resolve by upgrading Python and/or OpenSSL.
