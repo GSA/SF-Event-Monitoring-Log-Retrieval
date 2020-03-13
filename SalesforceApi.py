@@ -73,7 +73,7 @@ class SalesforceApi:
         if eventType != '':
             whereClause = "WHERE++EventType+=+'"+eventType+"'"
         # post the request
-        rawResponse = requests.get("https://"+self.sfURL+"/services/data/v32.0/query?q=SELECT+Id+,+EventType+,+LogFile+,+LogDate+,+LogFileLength+FROM+EventLogFile+"+whereClause, headers=headers)
+        rawResponse = requests.get("https://"+self.sfURL+"/services/data/v48.0/query?q=SELECT+Id+,+EventType+,+LogFile+,+LogDate+,+LogFileLength+FROM+EventLogFile+"+whereClause, headers=headers)
         response = json.loads(rawResponse.text)
 
         if self.debug:
@@ -110,7 +110,7 @@ class SalesforceApi:
 
         eventFileId = eventLogFile['Id']
         headers = {'Authorization':'Bearer '+self.accessToken,'X-PrettyPrint':'1','Accept-Encoding': 'gzip'}
-        rawResponse = requests.get('https://'+self.sfURL+'/services/data/v32.0/sobjects/EventLogFile/'+eventFileId+'/LogFile',headers=headers)
+        rawResponse = requests.get('https://'+self.sfURL+'/services/data/v48.0/sobjects/EventLogFile/'+eventFileId+'/LogFile',headers=headers)
 
 
         if self.debug:
@@ -122,7 +122,7 @@ class SalesforceApi:
         #     w = FileWriter('log', eventFileId)
         #     w.writeFile(rawResponse.content)
 
-        w = FileWriter(eventLogFile)
+        w = FileWriter(eventLogFile,self.sfURL)
         w.writeFile(rawResponse.content)
 
         return rawResponse
