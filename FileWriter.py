@@ -1,11 +1,19 @@
 import os
 import datetime
+import re
 
 class FileWriter:
     path = ''
-
+    global strLogDateTime
+    global strFormatedLogDateTime
+    
     def __init__(self, eventLogFile, sfURL):
-        self.path = 'data/'+sfURL+'/'+eventLogFile["EventType"]+'/'+eventLogFile["LogDate"]+'_'+eventLogFile["Id"]+'.csv'
+#        self.path = 'data/'+sfURL+'/'+eventLogFile["EventType"]+'/'+eventLogFile["LogDate"]+'_'+eventLogFile["Id"]+'.csv'
+        strLogDateTime = eventLogFile["LogDate"]
+        strFormatedLogDateTime = str(datetime.datetime.strptime(strLogDateTime[0:19],"%Y-%m-%dT%H:%M:%S"))
+        strFormatedLogDateTime = re.sub('[^a-zA-Z0-9 \n\.\-]', '', strFormatedLogDateTime).replace(" ", "_")
+        self.path = 'data/'+sfURL+'/'+eventLogFile["EventType"]+'/'+strFormatedLogDateTime+'_'+eventLogFile["Id"]+'.csv'
+        print(self.path)
 
         if not os.path.exists(os.path.dirname(self.path)):
             os.makedirs(os.path.dirname(self.path))
