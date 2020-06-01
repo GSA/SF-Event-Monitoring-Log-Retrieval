@@ -1,0 +1,15 @@
+name: Salesforce Event Monitoring Log Retrieval
+description: Python-based utility to fetch Salesforce Event Monitoring Logs and store them locally for consumption by log monitoring and analytics software.
+permissions:
+  licenses:
+    - URL: https://creativecommons.org/publicdomain/zero/1.0/
+      name: CC0 1.0 Universal
+  usageType: openSource
+tags:
+  - salesforce-event-monitoring
+  - python
+  - salesforce
+contact:
+  email: mark.vogelgesang@gsa.gov
+repositoryURL: https://github.com/GSA/SF-Event-Monitoring-Log-Retrieval
+organization: GSA IT
