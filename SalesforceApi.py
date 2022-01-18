@@ -122,7 +122,6 @@ class SalesforceApi:
         # if self.log:
         #     w = FileWriter('log', eventFileId)
         #     w.writeFile(rawResponse.content)
-
         w = FileWriter(eventLogFile,self.sfURL, self.debug)
         w.writeFile(rawResponse.content)
 

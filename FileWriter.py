@@ -8,6 +8,7 @@ class FileWriter:
     global strFormatedLogDateTime
     
     def __init__(self, eventLogFile, sfURL, debug=0):
+
 #        self.path = 'data/'+sfURL+'/'+eventLogFile["EventType"]+'/'+eventLogFile["LogDate"]+'_'+eventLogFile["Id"]+'.csv'
         strLogDateTime = eventLogFile["LogDate"]
         strFormatedLogDateTime = str(datetime.datetime.strptime(strLogDateTime[0:19],"%Y-%m-%dT%H:%M:%S"))
