@@ -1,3 +1,4 @@
+#!python2
 import requests, os, csv, datetime, json, sys, argparse, logging
 from requests.auth import HTTPBasicAuth
 from FileWriter import FileWriter
@@ -20,23 +21,23 @@ if args.orgName != '':
     with open('.env') as json_data:
         d = json.load(json_data)
     sfEnv = d[args.orgName]
-    print ">>Fetching logs from, "+sfEnv['salesforceURL']
+    print(">>Fetching logs from, "+sfEnv['salesforceURL'])
 
 if args.debug:
     _debug=1
-    print ">>Debug turned on"
+    print(">>Debug turned on")
 if args.env:
-    print ">>The following environments have credentials stored: "
+    print(">>The following environments have credentials stored: ")
     with open('.env') as json_data:
         d = json.load(json_data)
     for item in d:
-        print "  - "+item
-    print ">>You can use one of the sites by entering:\n\n  $ python retrievePackage orgname\n"
+        print("  - "+item)
+    print(">>You can use one of the sites by entering:\n\n  $ python retrievePackage orgname\n")
     sys.exit()
 if args.log:
     logStorageLocation = 'logs/'+datetime.datetime.now().strftime('%Y%m%d-%H%M.%S')+'.log'
     logging.basicConfig(filename= logStorageLocation, level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-    print ">>Logging turned on. File can be found at, "+logStorageLocation
+    print(">>Logging turned on. File can be found at, "+logStorageLocation)
 if args.verbose:
     try: # for Python 3
         from http.client import HTTPConnection
@@ -49,5 +50,9 @@ sa = SalesforceApi(environment=sfEnv, debug=_debug)
 sa.authenticate()
 # retrieve Event Logs
 response = sa.queryEventLogFile()
+print("Total EventLogFile Size: "+str(response['totalSize']))
+if ("nextRecordsUrl" in response):
+    print("NextRecordsUrl: "+response['nextRecordsUrl'])
+
 for record in response['records']:
     eventLogFile = sa.eventLogFile(record)

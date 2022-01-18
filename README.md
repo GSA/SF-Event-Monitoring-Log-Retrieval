@@ -1,33 +1,36 @@
-<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
-
 - [Salesforce Event Monitoring Log Retrieval](#salesforce-event-monitoring-log-retrieval)
-- [Setup](#setup)
-	- [Salesforce Event Monitoring](#salesforce-event-monitoring)
-	- [Salesforce Connected App](#salesforce-connected-app)
-	- [.env file](#env-file)
-- [Requirements](#requirements)
-- [Usage](#usage)
-	- [Run Locally](#run-locally)
-	- [Setup CRON Job](#setup-cron-job)
-- [FAQ and Troubleshooting](#faq-and-troubleshooting)
+  - [Setup](#setup)
+    - [Salesforce Event Monitoring](#salesforce-event-monitoring)
+    - [Create a Connected App](#create-a-connected-app)
+    - [.env file](#env-file)
+  - [Requirements](#requirements)
+  - [Usage](#usage)
+    - [Run Locally](#run-locally)
+    - [Setup CRON Job](#setup-cron-job)
+  - [FAQ and Troubleshooting](#faq-and-troubleshooting)
 
-<!-- /TOC -->
 # Salesforce Event Monitoring Log Retrieval
+
 A lightweight Python command line utility that fetches Salesforce Event Monitoring Log Files for the purpose of consumption by log management and monitoring software.
 
-# Setup
-## Salesforce Event Monitoring
+## Setup
+
+### Salesforce Event Monitoring
+
 Setting up Event Monitoring is a two day process. Day one will be setup and on day two you can access actual log files. If you are using Lightning, you will need to switch to classic (as of Winter '17) to turn on Event Monitoring
 
-Steps
+**Steps**
+
 * Go to Setup > Logs > Event Monitoring Setup
 * Click enable
 * Salesforce will start saving logs which can be accessed the next day
 
-## Salesforce Connected App
+### Create a Connected App
+
 You will need to create a Salesforce Connected app
 
-Steps
+**Steps**
+
 * Go to Setup > Create > Apps
 * Scroll down to Connected Apps, click New
 * Enter the App Name, for instance, Event Monitoring Log Retrieval
@@ -37,33 +40,41 @@ Steps
 * None of the information under Wave App Settings, Custom Connected App Handler, Mobile App Settings, or Canvas App Settings is required
 * Click Save
 
-## .env file
+### .env file
+
 * Copy the .sample.env file and rename to .env.
 * Add site URI, do not include https://
 * Enter user credentials including OAuth Consumer Key and Consumer Secret
 
-# Requirements
+## Requirements
+
 * Salesforce Event Monitoring
-* Python v2.7 or greater
+* Python v3.0 or greater
 * User with Salesforce API access
 
-# Usage
+## Usage
 
-## Run Locally
+### Run Locally
+
 Retrieve logs for a given environment
-```
+
+```sh
 $ retrieveLogs.py {orgname}
 >>Fetching logs from, orgname.cs32.my.salesforce.com
 ```
+
 Print debug output to terminal
-```
+
+```sh
 $ retrieveLogs.py orgname -d
 >>Fetching logs from, gsa-red--reddv10dvn.cs32.my.salesforce.com
 >>Debug turned on
 [TRUNCATED]
 ```
+
 Display list of environments stored in .env
-```
+
+```sh
 $ retrieveLogs.py -e
 >>The following environments have credentials stored:
   - orgname1
@@ -73,8 +84,10 @@ $ retrieveLogs.py -e
 
   $ python retrievePackage orgname
 ```
+
 Display help
-```
+
+```sh
 $ python retrieveLogs.py -h
 usage: retrieveLogs.py [-h] [-e] [-d] [-l] [-v] [orgName]
 
@@ -97,24 +110,31 @@ optional arguments:
                  headers) log to terminal. **NOTE, this argument prints a lot
                  of information to the terminal
 ```
+
 Retrieve basic logs and store in logs/ directory
-```
+
+```sh
 $ retrieveLogs.py {orgname} -l
 >>Fetching logs from, orgname.cs32.my.salesforce.com
 >>Logging turned on. File can be found at, logs/20161204-2027.34.log
 ```
+
 Retrieve logs and display robust request log information including HTTP requests, response codes, and headers
-```
+
+```sh
 $ retrieveLogs.py {orgname} -v
 >>Fetching logs from, orgname.cs32.my.salesforce.com
 [TRUNCATED]
 ```
-## Setup CRON Job
-```
+
+### Setup CRON Job
+
+```sh
 $ crontab -e
 0 1 * * * path/to/retrieveLogs.py {orgname}
 ```
 
-# FAQ and Troubleshooting
+## FAQ and Troubleshooting
+
 **500 Response on sa.authenticate()**
 * When authenticating, if Salesforce responds with a `500` error but you are able to reach the site via the browser, this is likely due to an outdated OpenSSL library old version of Python. Salesforce requires TLS 1.1 or greater for secure connections. Resolve by upgrading Python and/or OpenSSL.

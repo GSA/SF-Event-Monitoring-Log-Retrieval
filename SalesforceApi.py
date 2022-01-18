@@ -24,7 +24,7 @@ class SalesforceApi:
         self.debug = debug
         self.logPath = 'logs/tmp_'+datetime.datetime.now().strftime('%Y%m%d-%H%M.%S')+'.json'
         if self.debug:
-            print "salesforce api initiated"
+            print("salesforce api initiated")
 
 
     def authenticate(self):
@@ -46,9 +46,10 @@ class SalesforceApi:
         rawResponse = requests.post('https://'+self.sfURL+'/services/oauth2/token',headers=authHeaders, data=payload)
 
         response = json.loads(rawResponse.text)
+        print(response)
         if self.debug:
-            print "[DEBUG] authenticate >> "
-            print response
+            print("[DEBUG] authenticate >> ")
+            print(response)
         self.accessToken = response['access_token']
 
 
@@ -73,12 +74,12 @@ class SalesforceApi:
         if eventType != '':
             whereClause = "WHERE++EventType+=+'"+eventType+"'"
         # post the request
-        rawResponse = requests.get("https://"+self.sfURL+"/services/data/v32.0/query?q=SELECT+Id+,+EventType+,+LogFile+,+LogDate+,+LogFileLength+FROM+EventLogFile+"+whereClause, headers=headers)
+        rawResponse = requests.get("https://"+self.sfURL+"/services/data/v48.0/query?q=SELECT+Id+,+EventType+,+LogFile+,+LogDate+,+LogFileLength+FROM+EventLogFile+"+whereClause, headers=headers)
         response = json.loads(rawResponse.text)
 
         if self.debug:
-            print "[DEBUG] queryEventLogFile >> "
-            print response
+            print("[DEBUG] queryEventLogFile >> ")
+            print(response)
 
         return response
 
@@ -110,19 +111,19 @@ class SalesforceApi:
 
         eventFileId = eventLogFile['Id']
         headers = {'Authorization':'Bearer '+self.accessToken,'X-PrettyPrint':'1','Accept-Encoding': 'gzip'}
-        rawResponse = requests.get('https://'+self.sfURL+'/services/data/v32.0/sobjects/EventLogFile/'+eventFileId+'/LogFile',headers=headers)
+        rawResponse = requests.get('https://'+self.sfURL+'/services/data/v48.0/sobjects/EventLogFile/'+eventFileId+'/LogFile',headers=headers)
 
 
         if self.debug:
-            print "[DEBUG] eventLogFile >> "
-            print rawResponse
-            print rawResponse.content
+            print("[DEBUG] eventLogFile >> ")
+            print(rawResponse)
+            print(rawResponse.content)
 
         # if self.log:
         #     w = FileWriter('log', eventFileId)
         #     w.writeFile(rawResponse.content)
 
-        w = FileWriter(eventLogFile)
+        w = FileWriter(eventLogFile,self.sfURL, self.debug)
         w.writeFile(rawResponse.content)
 
         return rawResponse
