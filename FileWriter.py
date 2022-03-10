@@ -23,4 +23,4 @@ class FileWriter:
 
     def writeFile(self, input):
         with open(self.path, 'w') as file:
-            file.write(str(input))
+            file.write(input.decode())
